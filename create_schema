@@ -19,7 +19,7 @@ file = File.open("foreign_schema.sql", "wb")
 db.tables.each do |table|
   statement = <<-SQL
 CREATE FOREIGN TABLE #{schema_name}.#{table.to_s} (
-#{ db.schema(table).map { |x| "  #{x[0].to_s} #{x[1][:db_type]}" }.join(",\n") }
+#{ db.schema(table).map { |x| %{  "#{x[0].to_s}" #{x[1][:db_type]}} }.join(",\n") }
 )
 SERVER #{ARGV[1]}
 OPTIONS (schema_name 'public', table_name '#{table}');
