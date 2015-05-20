@@ -18,6 +18,7 @@ db   = Sequel.connect(ARGV[0])
 file = File.open("foreign_schema.sql", "wb")
 (db.tables | db.views).each do |table|
   statement = <<-SQL
+DROP FOREIGN TABLE IF EXISTS #{schema_name}.#{table.to_s} CASCADE;
 CREATE FOREIGN TABLE #{schema_name}.#{table.to_s} (
 #{ db.schema(table).map { |x| %{  "#{x[0].to_s}" #{x[1][:db_type]}} }.join(",\n") }
 )
